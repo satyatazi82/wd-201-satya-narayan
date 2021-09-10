@@ -1,0 +1,6 @@
+A, google.com, 216.58.196.110
+A, neon.ruby-lang.org, 221.186.184.75
+
+CNAME, www.ruby-lang.org, ruby-lang.org
+CNAME, mail.google.com, google.com
+CNAME, gmail.com, mail.google.com
