@@ -29,21 +29,28 @@ def parse_dns(raw)
 		end
 				record = line.split(',')
 		hash[record[1].gsub(/\s+/, "")] = {
-			"type" => record[0].gsub(/\s+/, ""),
-			"src" => record[1].gsub(/\s+/, ""),
-			"dest" => record[2].gsub(/\s+/, "")
+			'type' => record[0].gsub(/\s+/, ""),
+			# "src" => record[1].gsub(/\s+/, ""),
+			'target' => record[2].gsub(/\s+/, "")
 		}
 	end
 	return hash
 end
 def resolve(dns_records, lookup, domain)
 	rec = dns_records[domain]
-	lookup.push(rec['dest'])
 	#puts(rec)
-	if rec["type"] == 'A'
+	if (!rec)
+		lookup_chain << "Error: Record not found for "+domain
+		return
+	elsif rec['type'] == "CNAME"
+		lookup.push(rec['target'])
+		return resolve(dns_records, lookup, rec["target"])
+	elsif rec['type'] == "A"
+		lookup.push(rec['target'])
 		return lookup
 	else
-		return resolve(dns_records, lookup, rec["dest"])
+		lookup_chain << "Invalid record type for "+domain
+		return
 	end
 end
 # ..
@@ -55,3 +62,4 @@ dns_records = parse_dns(dns_raw)
 lookup_chain = [domain]
 lookup_chain = resolve(dns_records, lookup_chain, domain)
 puts lookup_chain.join(" => ")
+
