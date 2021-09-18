@@ -12,21 +12,9 @@ class Todo
   end
 
   def to_displayable_string
-    t = ''
-
-    if @completed == true
-      t += '[x]'
-    else
-      t += '[ ]'
-    end
-
-    if @due_date == Date.today
-      t += " #{@text}"
-    else
-      t += " #{@text} #{@due_date}"
-    end
-
-    return t
+    display_status = @completed ? "[x]" : "[ ]"
+    display_date = @due_date == Date.today ? "" : @sdue_date
+    "#{display_status} #{@text} #{display_date}"
   end
 end
 
