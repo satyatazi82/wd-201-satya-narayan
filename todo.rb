@@ -7,8 +7,16 @@ class Todo
     @completed = completed
   end
 
-  def dueDate
-    @due_date
+  def due_later
+    @due_date > Date.today
+  end
+
+  def due_today
+    @due_date == Date.today
+  end
+
+  def overdue
+    @due_date < Date.today
   end
 
   def to_displayable_string
@@ -28,15 +36,15 @@ class TodosList
   end
 
   def overdue
-    TodosList.new(@todos.filter { |todo| todo.dueDate < Date.today })
+    TodosList.new(@todos.filter { |todo| todo.overdue})
   end
 
   def due_today
-    TodosList.new(@todos.filter { |todo| todo.dueDate == Date.today })
+    TodosList.new(@todos.filter { |todo| todo.due_today })
   end
 
   def due_later
-    TodosList.new(@todos.filter { |todo| todo.dueDate > Date.today })
+    TodosList.new(@todos.filter { |todo| todo.due_later })
   end
 
   def to_displayable_list
